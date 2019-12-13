@@ -10,6 +10,7 @@ func main() {
 	prog := utils.ExtractInts(data)
 	// Part1
 	fmt.Println(execute(prog, 1))
+	fmt.Println(execute(prog, 5))
 }
 
 type Operation int
@@ -19,6 +20,10 @@ const (
 	Multiply
 	Read
 	Write
+	JumpTrue
+	JumpFalse
+	LessThan
+	Equals
 	Exit = 99
 )
 
@@ -60,6 +65,32 @@ func execute(p []int, input int) (output []int) {
 		case Write:
 			output = append(output, read(1))
 			i += 2
+		case JumpTrue:
+			if read(1) != 0 {
+				i = read(2)
+			} else {
+				i += 3
+			}
+		case JumpFalse:
+			if read(1) == 0 {
+				i = read(2)
+			} else {
+				i += 3
+			}
+		case LessThan:
+			if read(1) < read(2) {
+				p[p[i+3]] = 1
+			} else {
+				p[p[i+3]] = 0
+			}
+			i += 4
+		case Equals:
+			if read(1) == read(2) {
+				p[p[i+3]] = 1
+			} else {
+				p[p[i+3]] = 0
+			}
+			i += 4
 		case Exit:
 			return
 		default:
