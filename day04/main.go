@@ -30,7 +30,12 @@ func monotonic(i int) bool {
 func nextEqual(i int) bool {
 	digits := Digits(i)
 	for k := 0; k < len(digits)-1; k++ {
-		if digits[k] == digits[k+1] {
+		once := 0
+		for k < len(digits)-1 && digits[k] == digits[k+1] {
+			k++
+			once++
+		}
+		if once == 1 {
 			return true
 		}
 	}
