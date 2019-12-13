@@ -8,14 +8,26 @@ import (
 func main() {
 	data := utils.ReadInput("day02/input.txt")
 	prog := utils.ExtractInts(data)
-	res := execute(prog)
+	// Part1
+	res := execute(prog, 12, 2)
 	fmt.Println(res)
+
+	// Part2
+	for n := 0; n <= 99; n++ {
+		for v := 0; v <= 99; v++ {
+			res := execute(prog, n, v)
+			if res == 19690720 {
+				fmt.Printf("%d%d", n, v)
+				return
+			}
+		}
+	}
 }
 
-func execute(p []int) int {
+func execute(p []int, noun, verb int) int {
 	p = append([]int(nil), p...)
-	p[1] = 12
-	p[2] = 2
+	p[1] = noun
+	p[2] = verb
 	for i := 0; i < len(p); i += 4 {
 		op, x, y, z := p[i], p[i+1], p[i+2], p[i+3]
 		switch op {
