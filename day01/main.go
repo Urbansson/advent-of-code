@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	input := utils.ReadInput("/Users/theodor/Documents/svt/aoc/day01/input.txt")
+	input := utils.ReadInput("day01/input.txt")
 	data := utils.IntList(input)
 	fmt.Println(part1(data))
 	fmt.Println(part2(data))

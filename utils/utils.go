@@ -49,3 +49,8 @@ func Atoi(s string) int {
 	}
 	return i
 }
+
+// ExtractLines splits input on newlines
+func ExtractLines(s string) []string {
+	return strings.Split(strings.TrimSpace(s), "\n")
+}
