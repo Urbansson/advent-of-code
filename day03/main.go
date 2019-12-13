@@ -66,21 +66,27 @@ func main() {
 	data := utils.ExtractLines(input)
 	panel := make(map[Coordinate]int)
 	var c1 Coordinate
+	steps := 0
 	for _, i := range strings.Split(data[0], ",") {
 		dir := directionFromUPLR(i[0])
 		step := utils.Atoi(i[1:])
 		c1 = c1.Walk(dir, step, func(c Coordinate) {
-			panel[c]++
+			steps++
+			if _, ok := panel[c]; !ok {
+				panel[c] = steps
+			}
 		})
 	}
-	intersections := make(map[Coordinate]bool)
+	steps = 0
+	intersections := make(map[Coordinate]int)
 	var c2 Coordinate
 	for _, i := range strings.Split(data[1], ",") {
 		dir := directionFromUPLR(i[0])
 		step := utils.Atoi(i[1:])
 		c2 = c2.Walk(dir, step, func(c Coordinate) {
-			if panel[c] > 0 {
-				intersections[c] = true
+			steps++
+			if val, ok := panel[c]; ok {
+				intersections[c] = steps + val
 			}
 		})
 	}
@@ -89,4 +95,10 @@ func main() {
 		best = int(math.Min(float64(best), float64(i.Manhattan(Coordinate{0, 0}))))
 	}
 	fmt.Println(best)
+	bestSteps := math.MaxInt64
+	for _, steps := range intersections {
+		bestSteps = int(math.Min(float64(bestSteps), float64(steps)))
+	}
+	fmt.Println(bestSteps)
+
 }
