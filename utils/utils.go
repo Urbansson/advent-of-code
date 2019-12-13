@@ -54,3 +54,13 @@ func Atoi(s string) int {
 func ExtractLines(s string) []string {
 	return strings.Split(strings.TrimSpace(s), "\n")
 }
+
+// Digits splits a int to its digits
+func Digits(i int) []int {
+	var digits []int
+	for i != 0 {
+		digits = append([]int{i % 10}, digits...)
+		i /= 10
+	}
+	return digits
+}
