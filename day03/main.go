@@ -100,5 +100,4 @@ func main() {
 		bestSteps = int(math.Min(float64(bestSteps), float64(steps)))
 	}
 	fmt.Println(bestSteps)
-
 }
