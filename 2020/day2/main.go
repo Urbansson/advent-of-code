@@ -12,7 +12,7 @@ func main() {
 	lines := aoc.ExtractLines(input)
 	count := 0
 	for _, l := range lines {
-		if validate(parse(l)) {
+		if validateToboggan(parse(l)) {
 			count++
 		}
 	}
@@ -25,11 +25,20 @@ func parse(line string) (int, int, string, string) {
 	minMax := strings.Split(l[0], "-")
 	min := aoc.Atoi(minMax[0])
 	max := aoc.Atoi(minMax[1])
-	return min, max, l[1], x[1]
+	return min, max, strings.TrimSpace(l[1]), strings.TrimSpace(x[1])
 }
 
 func validate(min, max int, letter, password string) bool {
 	c := strings.Count(password, letter)
 
 	return c >= min && c <= max
+}
+
+func validateToboggan(first, second int, letter, password string) bool {
+	l1 := password[first-1]
+	l2 := password[second-1]
+	if l1 != l2 && (l1 == letter[0] || l2 == letter[0]) {
+		return true
+	}
+	return false
 }
