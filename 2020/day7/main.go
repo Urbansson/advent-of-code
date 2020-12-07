@@ -9,27 +9,29 @@ import (
 
 func main() {
 	data := aoc.ReadStdin()
-	containedin := make(map[string]map[string]bool, 0)
+	containedin := make(map[string][]struct {
+		ct  int
+		col string
+	}, 0)
 	r, _ := regexp.Compile("(.+?) bags contain")
 	ir, _ := regexp.Compile("(\\d+) (.+?) bags?[,.]")
 	for _, line := range aoc.ExtractLines(data) {
 		color := r.FindStringSubmatch(line)[1]
 		for _, ic := range ir.FindAllStringSubmatch(line, -1) {
-			if containedin[ic[2]] == nil {
-				containedin[ic[2]] = make(map[string]bool, 0)
-			}
-			containedin[ic[2]][color] = true
+			containedin[color] = append(containedin[color], struct {
+				ct  int
+				col string
+			}{ct: aoc.Atoi(ic[1]), col: ic[2]})
 		}
 	}
-
-	contains := make(map[string]bool, 0)
-	var check func(color string)
-	check = func(color string) {
-		for k, _ := range containedin[color] {
-			contains[k] = true
-			check(k)
+	var check func(color string) int
+	check = func(color string) int {
+		count := 0
+		for _, v := range containedin[color] {
+			count += v.ct
+			count += v.ct * check(v.col)
 		}
+		return count
 	}
-	check("shiny gold")
-	fmt.Println(len(contains))
+	fmt.Println(check("shiny gold"))
 }
