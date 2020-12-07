@@ -3,6 +3,7 @@ package aoc
 import (
 	"bytes"
 	"io/ioutil"
+	"os"
 	"strconv"
 	"strings"
 	"unicode"
@@ -15,6 +16,14 @@ func ReadInput(filename string) string {
 		panic(err)
 	}
 	return string(bytes.TrimSpace(data))
+}
+
+func ReadStdin() string {
+	d, err := ioutil.ReadAll(os.Stdin)
+	if err != nil {
+		panic(err)
+	}
+	return string(bytes.TrimSpace(d))
 }
 
 // IntList parses a list of ints. devided by spaces or newlines
