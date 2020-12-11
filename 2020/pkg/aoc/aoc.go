@@ -73,3 +73,18 @@ func Digits(i int) []int {
 	}
 	return digits
 }
+
+// MinMax returns min max values from a slice.
+func MinMax(array []int) (int, int) {
+	max := array[0]
+	min := array[0]
+	for _, value := range array {
+		if max < value {
+			max = value
+		}
+		if min > value {
+			min = value
+		}
+	}
+	return min, max
+}
