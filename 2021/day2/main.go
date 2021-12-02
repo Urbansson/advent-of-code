@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/Urbansson/advent-of-code/2021/pkg/aoc"
 )
@@ -10,20 +9,20 @@ import (
 func main() {
 	data := aoc.ReadStdin()
 	lines := aoc.ExtractLines(data)
-
-	var h, v int
-	for i, l := range lines {
-		fmt.Println(i, l)
-		f := strings.Split(l, " ")
-		d := aoc.Atoi(f[1])
-		switch f[0] {
+	x, y, aim := 0, 0, 0
+	for _, l := range lines {
+		var op string
+		var v int
+		fmt.Sscanf(string(l), "%s %d", &op, &v)
+		switch op {
 		case "forward":
-			v = v + d
+			x += v
+			y += (aim * v)
 		case "down":
-			h = h + d
+			aim += v
 		case "up":
-			h = h - d
+			aim -= v
 		}
 	}
-	fmt.Println(h * v)
+	fmt.Println(x * y)
 }
