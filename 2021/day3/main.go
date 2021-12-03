@@ -33,23 +33,12 @@ func main() {
 	e, _ := strconv.ParseInt(epsilon, 2, 64)
 	// Part 1
 	fmt.Println(g * e)
-
-	filter := make([]int, len(mc))
-	for i, v := range mc {
-		if v >= len(lines)/2 {
-			filter[i] = 1
-		} else {
-			filter[i] = 0
-		}
-
-	}
 	fmt.Println("----")
+
 	res, _ := findOxygenRating(lines, 0)
 	res1, _ := findCO2Rating(lines, 0)
-
 	o2, _ := strconv.ParseInt(res, 2, 64)
 	co2, _ := strconv.ParseInt(res1, 2, 64)
-
 	// Part 2
 	fmt.Println(o2 * co2)
 }
