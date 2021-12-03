@@ -18,6 +18,7 @@ func ReadInput(filename string) string {
 	return string(bytes.TrimSpace(data))
 }
 
+// ReadStdin returns the contents of data piped to stdin until EOF.
 func ReadStdin() string {
 	d, err := ioutil.ReadAll(os.Stdin)
 	if err != nil {
@@ -36,6 +37,7 @@ func IntList(s string) []int {
 	return ints
 }
 
+// ExtractInts ...
 func ExtractInts(s string) []int {
 	fs := strings.FieldsFunc(s, func(r rune) bool {
 		return !unicode.IsDigit(r) && r != '-'

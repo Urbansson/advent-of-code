@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/Urbansson/advent-of-code/2021/pkg/aoc"
+	"github.com/Urbansson/advent-of-code/pkg/aoc"
 )
 
 func main() {
