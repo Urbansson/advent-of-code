@@ -13,7 +13,7 @@ func main() {
 	for _, l := range lines {
 		var op string
 		var v int
-		fmt.Sscanf(string(l), "%s %d", &op, &v)
+		fmt.Sscanf(l, "%s %d", &op, &v)
 		switch op {
 		case "forward":
 			x += v
