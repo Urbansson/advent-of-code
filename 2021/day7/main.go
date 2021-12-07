@@ -15,10 +15,13 @@ func main() {
 	min, max := aoc.MinMax(crabs)
 
 	minFuel := math.MaxInt
+	sum := func(n int) int {
+		return (n * (1 + n)) / 2
+	}
 	for i := min; i <= max; i++ {
 		currFuel := 0
 		for _, crab := range crabs {
-			v := int(math.Abs(float64(i - crab)))
+			v := sum(int(math.Abs(float64(i - crab))))
 			currFuel += v
 		}
 		if currFuel < minFuel {
