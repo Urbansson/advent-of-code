@@ -3,6 +3,7 @@ package aoc
 import (
 	"bytes"
 	"io/ioutil"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -89,4 +90,12 @@ func MinMax(array []int) (int, int) {
 		}
 	}
 	return min, max
+}
+
+func Max(x, y int) int {
+	return int(math.Max(float64(x), float64(y)))
+}
+
+func Min(x, y int) int {
+	return int(math.Min(float64(x), float64(y)))
 }
