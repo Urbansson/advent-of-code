@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"math"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 	"unicode"
@@ -98,4 +99,10 @@ func Max(x, y int) int {
 
 func Min(x, y int) int {
 	return int(math.Min(float64(x), float64(y)))
+}
+
+func SortString(s string) string {
+	tmp := strings.Split(s, "")
+	sort.Strings(tmp)
+	return strings.Join(tmp, "")
 }
