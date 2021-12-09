@@ -2,7 +2,6 @@ package aoc
 
 import (
 	"bytes"
-	"fmt"
 	"io/ioutil"
 	"math"
 	"os"
@@ -57,7 +56,6 @@ func ExtractInts(s string) []int {
 	})
 	ints := make([]int, 0, len(fs))
 	for _, w := range fs {
-		fmt.Println(w)
 		i, err := strconv.Atoi(w)
 		if err == nil {
 			ints = append(ints, i)
