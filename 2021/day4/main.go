@@ -21,7 +21,6 @@ func main() {
 	currBoard := map[pos]int{}
 	for x, l := range lines[2:] {
 		if len(l) == 0 {
-			fmt.Println("empty")
 			boards = append(boards, currBoard)
 			currBoard = make(map[pos]int)
 			continue
@@ -34,16 +33,22 @@ func main() {
 	boards = append(boards, currBoard)
 
 	marked := make(map[int]bool)
+	hasBingo := map[int]bool{}
 	for _, n := range numbers {
 		marked[n] = true
-		for _, b := range boards {
+		for i, b := range boards {
+			if hasBingo[i] {
+				continue
+			}
 			if bingo(b, marked) {
-				fmt.Println(sum(b, marked) * n)
-				return
+				hasBingo[i] = true
+				if len(hasBingo) == len(boards) {
+					fmt.Println(sum(b, marked) * n)
+					return
+				}
 			}
 		}
 	}
-	fmt.Println("hmm", len(boards))
 }
 
 func sum(board map[pos]int, marked map[int]bool) int {
