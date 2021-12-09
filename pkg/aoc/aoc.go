@@ -2,6 +2,7 @@ package aoc
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
 	"math"
 	"os"
@@ -29,6 +30,16 @@ func ReadStdin() string {
 	return string(bytes.TrimSpace(d))
 }
 
+// Splits a string of number to indiviual digits
+func DigitList(s string) []int {
+	d := strings.Split(s, "")
+	ints := make([]int, len(d))
+	for i, n := range d {
+		ints[i] = Atoi(n)
+	}
+	return ints
+}
+
 // IntList parses a list of ints. devided by spaces or newlines
 func IntList(s string) []int {
 	fs := strings.Fields(s)
@@ -46,6 +57,7 @@ func ExtractInts(s string) []int {
 	})
 	ints := make([]int, 0, len(fs))
 	for _, w := range fs {
+		fmt.Println(w)
 		i, err := strconv.Atoi(w)
 		if err == nil {
 			ints = append(ints, i)
