@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/Urbansson/advent-of-code/pkg/aoc"
 )
@@ -12,22 +13,33 @@ func main() {
 
 	opener := map[rune]rune{'(': ')', '[': ']', '{': '}', '<': '>'}
 	closer := map[rune]rune{')': '(', ']': '[', '}': '{', '>': '<'}
-	points := map[rune]int{')': 3, ']': 57, '}': 1197, '>': 25137}
+	points := map[rune]int{'(': 1, '[': 2, '{': 3, '<': 4}
 
-	res := 0
+	scores := []int{}
 	for _, l := range lines {
 		stack := []rune{}
+		corrupted := false
 		for _, r := range l {
 			if _, ok := opener[r]; ok {
 				stack = append(stack, r)
 			} else {
 				if stack[len(stack)-1] != closer[r] {
-					res += points[r]
+					corrupted = true
 					break
 				}
 				stack = stack[:len(stack)-1]
 			}
 		}
+		fmt.Println(len(stack), corrupted)
+		if !corrupted {
+			var score int
+			for i := len(stack) - 1; i >= 0; i-- {
+				score = score*5 + points[stack[i]]
+			}
+			scores = append(scores, score)
+
+		}
 	}
-	fmt.Println(res)
+	sort.Ints(scores)
+	fmt.Println(scores[len(scores)/2])
 }
