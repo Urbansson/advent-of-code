@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"sort"
 	"strings"
 
 	"github.com/Urbansson/advent-of-code/pkg/aoc"
@@ -37,6 +36,6 @@ func main() {
 	for _, c := range counts {
 		cs = append(cs, c)
 	}
-	sort.Ints(cs)
-	fmt.Println(cs[len(cs)-1] - cs[0] - 1)
+	min, max := aoc.MinMax(cs)
+	fmt.Println(max - min - 1)
 }
