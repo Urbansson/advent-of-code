@@ -8,40 +8,35 @@ import (
 	"github.com/Urbansson/advent-of-code/pkg/aoc"
 )
 
-type pos struct {
-	x int
-	y int
-}
-
 func main() {
 	data := aoc.ReadStdin()
 	lines := aoc.ExtractLines(data)
 	template := lines[0]
-	pairs := make(map[string]string)
+	rules := map[string]string{}
 	for _, l := range lines[2:] {
 		pair := strings.Split(l, " -> ")
-		pairs[pair[0]] = pair[1]
+		rules[pair[0]] = pair[1]
+	}
+	pairs := map[string]int{}
+	for i := 0; i < len(template)-1; i++ {
+		pairs[string(template[i])+string(template[i+1])]++
 	}
 	for i := 0; i < 40; i++ {
-		res := template
-		offset := 0
-		for k := 0; k < len(template)-1; k++ {
-			pair := template[k : k+2]
-			if pol, ok := pairs[pair]; ok {
-				res = res[:k+offset+1] + pol + res[k+offset+1:]
-				offset++
-			}
+		newPairs := map[string]int{}
+		for k, v := range pairs {
+			newPairs[string(k[0])+rules[k]] += v
+			newPairs[rules[k]+string(k[1])] += v
 		}
-		template = res
+		pairs = newPairs
 	}
-	mc := make(map[rune]int)
-	for _, e := range template {
-		mc[e]++
+	counts := map[rune]int{}
+	for k, v := range pairs {
+		counts[rune(k[0])] += v
 	}
-	mcs := []int{}
-	for _, c := range mc {
-		mcs = append(mcs, c)
+	cs := []int{}
+	for _, c := range counts {
+		cs = append(cs, c)
 	}
-	sort.Ints(mcs)
-	fmt.Println(mcs[len(mcs)-1] - mcs[0])
+	sort.Ints(cs)
+	fmt.Println(cs[len(cs)-1] - cs[0] - 1)
 }
