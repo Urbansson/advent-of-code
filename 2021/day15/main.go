@@ -31,6 +31,27 @@ func main() {
 		}
 	}
 
+	largeCave := map[pos]int{}
+	// Create a larger cave.
+	for x := 0; x < 5; x++ {
+		for y := 0; y < 5; y++ {
+			for k, v := range cave {
+				newRisk := v + x + y
+				if newRisk > 9 {
+					newRisk = newRisk - 9
+				}
+				largeCave[pos{
+					x: (k.x) + (maxX+1)*x,
+					y: (k.y) + (maxY+1)*y,
+				}] = newRisk
+			}
+		}
+	}
+
+	// Bump grid to correct size.
+	maxX = (maxX+1)*5 - 1
+	maxY = (maxY+1)*5 - 1
+
 	riskAt := make(map[pos]int)
 
 	pq := make(PriorityQueue, 0)
@@ -47,7 +68,7 @@ func main() {
 				continue
 			}
 
-			nextRisk := head.riskLevel + cave[next]
+			nextRisk := head.riskLevel + largeCave[next]
 			if sAt, ok := riskAt[next]; ok && sAt <= nextRisk {
 				continue
 			}
