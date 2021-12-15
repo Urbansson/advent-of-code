@@ -32,10 +32,16 @@ func main() {
 	for k, v := range pairs {
 		counts[rune(k[0])] += v
 	}
+	fmt.Println(counts)
+	fmt.Println('F')
+
 	cs := []int{}
 	for _, c := range counts {
 		cs = append(cs, c)
 	}
 	min, max := aoc.MinMax(cs)
+	fmt.Println(min, max)
+
+	fmt.Print(string(67), string(86))
 	fmt.Println(max - min - 1)
 }
