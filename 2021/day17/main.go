@@ -10,10 +10,7 @@ import (
 func main() {
 	data := aoc.ReadStdin()
 	var x1, x2, y1, y2 int
-
 	fmt.Sscanf(data, "target area: x=%d..%d, y=%d..%d", &x1, &x2, &y1, &y2)
-	fmt.Println("res", x1, x2, y1, y2)
-
 	calc := func(v aoc.XY) (int, bool) {
 		top := 0
 		pos := aoc.XY{}
@@ -38,11 +35,9 @@ func main() {
 			v.Y--
 		}
 	}
-
 	var top int
-
 	b := 500
-
+	r := make(map[aoc.XY]bool)
 	for x := b * -1; x < b; x++ {
 		for y := b * -1; y < b; y++ {
 			v := aoc.XY{X: x, Y: y}
@@ -50,9 +45,9 @@ func main() {
 				if m > top {
 					top = m
 				}
+				r[v] = true
 			}
 		}
 	}
-
-	fmt.Println(top)
+	fmt.Println(top, len(r))
 }
