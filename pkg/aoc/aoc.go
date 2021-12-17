@@ -116,3 +116,8 @@ func SortString(s string) string {
 	sort.Strings(tmp)
 	return strings.Join(tmp, "")
 }
+
+type XY struct {
+	X int
+	Y int
+}
