@@ -14,7 +14,6 @@ func (s *Stack[C]) Push(v C) {
 	*s = append(*s, v)
 }
 
-// PushN pushes n elements from the stack to the stack
 func (s *Stack[C]) PushN(v []C) {
 	*s = append(*s, v...)
 }
