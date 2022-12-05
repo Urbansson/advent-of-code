@@ -14,12 +14,26 @@ func (s *Stack[C]) Push(v C) {
 	*s = append(*s, v)
 }
 
+// PushN pushes n elements from the stack to the stack
+func (s *Stack[C]) PushN(v []C) {
+	*s = append(*s, v...)
+}
+
 func (s *Stack[C]) Pop() C {
 	if len(*s) == 0 {
 		panic("stack is empty")
 	}
 	v := (*s)[len(*s)-1]
 	*s = (*s)[:len(*s)-1]
+	return v
+}
+
+func (s *Stack[C]) PopN(n int) []C {
+	if len(*s) < n {
+		panic("stack is empty")
+	}
+	v := (*s)[len(*s)-n:]
+	*s = (*s)[:len(*s)-n]
 	return v
 }
 
@@ -50,10 +64,7 @@ func main() {
 	for _, l := range aoc.ExtractLines(split[1]) {
 		var amount, from, to int
 		fmt.Sscanf(l, "move %d from %d to %d", &amount, &from, &to)
-		for i := 0; i < amount; i++ {
-			stacks[to-1].Push(stacks[from-1].Pop())
-		}
-		//	Debug(stacks)
+		stacks[to-1].PushN(stacks[from-1].PopN(amount))
 	}
 
 	for _, s := range stacks {
