@@ -12,6 +12,7 @@ func main() {
 	lines := aoc.ExtractLines(data)
 
 	sum := 0
+	sumO := 0
 	for _, l := range lines {
 		e := strings.Replace(l, "-", " ", -1)
 		e = strings.Replace(e, ",", " ", -1)
@@ -22,12 +23,19 @@ func main() {
 
 		if contained(r1, r2) || contained(r2, r1) {
 			sum++
+			sumO++
+		} else if overlap(r1, r2) {
+			sumO++
 		}
 
 	}
-	fmt.Println(sum)
+	fmt.Println(sum, sumO)
 }
 
 func contained(r1, r2 aoc.Range) bool {
 	return r1.Start >= r2.Start && r1.End <= r2.End
+}
+
+func overlap(r1, r2 aoc.Range) bool {
+	return r1.End <= r2.Start && r1.Start >= r2.End
 }
