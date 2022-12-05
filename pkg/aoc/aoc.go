@@ -29,6 +29,15 @@ func ReadStdin() string {
 	return string(bytes.TrimSpace(d))
 }
 
+// ReadStdin returns the contents of data piped to stdin until EOF.
+func ReadStdinRaw() string {
+	d, err := ioutil.ReadAll(os.Stdin)
+	if err != nil {
+		panic(err)
+	}
+	return string((d))
+}
+
 // Splits a string of number to indiviual digits
 func DigitList(s string) []int {
 	d := strings.Split(s, "")
@@ -76,6 +85,10 @@ func Atoi(s string) int {
 // ExtractLines splits input on newlines
 func ExtractLines(s string) []string {
 	return strings.Split(strings.TrimSpace(s), "\n")
+}
+
+func ExtractLinesRaw(s string) []string {
+	return strings.Split(s, "\n")
 }
 
 // Digits splits a int to its digits
