@@ -6,31 +6,29 @@ import (
 	"github.com/Urbansson/advent-of-code/pkg/aoc"
 )
 
-const sopLength = 14
-
 func main() {
 	data := aoc.ReadStdinRaw()
-
-	for i := 0; i < len(data); i++ {
-
-		sop := data[i : i+sopLength]
-
-		if !hasRepeated(sop) {
-			fmt.Println("Found it!, ", i+sopLength, sop)
-			break
-		}
-	}
-
+	fmt.Println(findSOP(data, 4))
+	fmt.Println(findSOP(data, 14))
 }
 
-// Checks for repeated characters in a string
-func hasRepeated(s string) bool {
-	for i := 0; i < len(s); i++ {
-		for j := i + 1; j < len(s); j++ {
-			if s[i] == s[j] {
-				return true
-			}
+func findSOP(input string, l int) int {
+	for i := 0; i < len(input); i++ {
+		sop := input[i : i+l]
+		if !hasRepeated(sop) {
+			return i + l
 		}
+	}
+	return -1
+}
+
+func hasRepeated(s string) bool {
+	seen := map[rune]interface{}{}
+	for _, c := range s {
+		if _, ok := seen[c]; ok {
+			return true
+		}
+		seen[c] = struct{}{}
 	}
 	return false
 }
