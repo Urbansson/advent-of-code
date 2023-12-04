@@ -12,14 +12,13 @@ import (
 func main() {
 	data := aoc.ReadStdin()
 	lines := aoc.ExtractLines(data)
-
 	re := regexp.MustCompile(`(\d+) (\w+)`)
 
 	sum := 0
+	power := 0
 
 	for i, l := range lines {
 		r := strings.Split(l, ":")[1]
-
 		lu := map[string]int{}
 
 		for _, m := range re.FindAllStringSubmatch(r, -1) {
@@ -30,7 +29,7 @@ func main() {
 		if lu["red"] <= 12 && lu["green"] <= 13 && lu["blue"] <= 14 {
 			sum += i + 1
 		}
+		power += lu["red"] * lu["green"] * lu["blue"]
 	}
-
-	fmt.Println(sum)
+	fmt.Println(sum, power)
 }
