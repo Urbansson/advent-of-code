@@ -19,7 +19,7 @@ func main() {
 	grid := make(map[int]map[int]Tree)
 
 	for x, line := range lines {
-		grid[] = make(map[int]Tree)
+		//grid[] = make(map[int]Tree)
 		for y := range line {
 			grid[y][x] = Tree{
 				visable: true,
