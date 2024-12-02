@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 
 	"github.com/Urbansson/advent-of-code/pkg/aoc"
 )
@@ -15,59 +16,47 @@ func main() {
 		il := aoc.ExtractInts(l)
 
 		if safeCheck((il)) {
+			//fmt.Println("safe", il)
 			sum++
-		}
 
+		}
+		fmt.Println("---")
 	}
 
 	fmt.Println("sum", sum)
 }
 
 func safeCheck(i []int) bool {
-	valid := true
-
-	// indicates if report should increase or deacrese
-	dir := 0
-
+	fmt.Println("testing", i)
+	dir := i[0] - i[len(i)-1]
 	p := i[0]
-	for _, v := range i[1:] {
-		if p < v {
-			if dir == 0 {
-				dir = 1
-			}
-			if dir != 1 {
-				valid = false
-				break
-			}
-
-			if !safeStep(v - p) {
-				valid = false
-				break
-			}
-
-		} else if p > v {
-			if dir == 0 {
-				dir = -1
-			}
-			if dir != -1 {
-				valid = false
-				break
-			}
-			if !safeStep(p - v) {
-				valid = false
-				break
-			}
-
-		} else {
-			// Not increasing or decreasing == invalid
-			valid = false
-			break
+	for _, c := range i[1:] {
+		fmt.Println("check if safe level", p, c)
+		fmt.Println("check step size", int(math.Abs(float64(p-c))), safeLavelChange(int(math.Abs(float64(p-c)))))
+		if !safeLavelChange(int(math.Abs(float64(p - c)))) {
+			fmt.Println("[Not Valid step size]")
+			return false
 		}
-		p = v
+		// We expect the value to increase
+		if dir < 0 {
+			fmt.Println("value should increase", p, ">", c, p > c)
+			if p > c {
+				fmt.Println("[Wrong direction, should increase]")
+				return false
+			}
+		} else {
+			fmt.Println("value should decrease", p, "<", c, p < c)
+			if p < c {
+				fmt.Println("[Wrong direction, should decrease]")
+				return false
+			}
+		}
+		p = c
 	}
-	return valid
+	fmt.Println("Valid report")
+	return true
 }
 
-func safeStep(i int) bool {
+func safeLavelChange(i int) bool {
 	return 0 < i && i <= 3
 }
