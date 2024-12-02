@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
+	"slices"
 
 	"github.com/Urbansson/advent-of-code/pkg/aoc"
 )
@@ -15,11 +16,25 @@ func main() {
 	for _, l := range lines {
 		il := aoc.ExtractInts(l)
 
-		if safeCheck((il)) {
+		if isSafeRemove((il)) {
 			sum++
 		}
 	}
 	fmt.Println("sum", sum)
+}
+
+func isSafeRemove(report []int) bool {
+	if safeCheck(report) {
+		return true
+	}
+
+	for i := range report {
+		portion := slices.Delete(slices.Clone(report), i, i+1)
+		if safeCheck(portion) {
+			return true
+		}
+	}
+	return false
 }
 
 func safeCheck(input []int) bool {
