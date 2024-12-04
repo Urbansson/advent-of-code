@@ -26,6 +26,58 @@ func main() {
 
 	fmt.Println("---")
 	fmt.Println(Solve(grid))
+	fmt.Println(Solve2(grid))
+}
+
+func Solve2(grid map[aoc.XY]rune) int {
+	sum := 0
+
+	// Determine bounds of the grid
+	var minX, minY, maxX, maxY int
+
+	for coord := range grid {
+		if coord.X < minX {
+			minX = coord.X
+		}
+		if coord.X > maxX {
+			maxX = coord.X
+		}
+		if coord.Y < minY {
+			minY = coord.Y
+		}
+		if coord.Y > maxY {
+			maxY = coord.Y
+		}
+	}
+
+	// Print the grid
+	for y := minY; y <= maxY; y++ { // Start from maxY to print top-down
+		for x := minX; x <= maxX; x++ {
+			masCount := 0
+			if grid[aoc.XY{X: x, Y: y}] == 'A' {
+				if grid[aoc.XY{X: x - 1, Y: y - 1}] == 'M' && grid[aoc.XY{X: x + 1, Y: y + 1}] == 'S' {
+					masCount++
+				}
+
+				if grid[aoc.XY{X: x - 1, Y: y - 1}] == 'S' && grid[aoc.XY{X: x + 1, Y: y + 1}] == 'M' {
+					masCount++
+				}
+
+				if grid[aoc.XY{X: x - 1, Y: y + 1}] == 'M' && grid[aoc.XY{X: x + 1, Y: y - 1}] == 'S' {
+					masCount++
+				}
+
+				if grid[aoc.XY{X: x - 1, Y: y + 1}] == 'S' && grid[aoc.XY{X: x + 1, Y: y - 1}] == 'M' {
+					masCount++
+				}
+			}
+			if masCount == 2 {
+				sum++
+			}
+		}
+	}
+
+	return sum
 }
 
 func Solve(grid map[aoc.XY]rune) int {
