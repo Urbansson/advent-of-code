@@ -2,7 +2,7 @@ package aoc
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 	"math"
 	"os"
 	"sort"
@@ -13,7 +13,7 @@ import (
 
 // ReadInput returns the contents of filename as a string.
 func ReadInput(filename string) string {
-	data, err := ioutil.ReadFile(filename)
+	data, err := os.ReadFile(filename)
 	if err != nil {
 		panic(err)
 	}
@@ -22,7 +22,7 @@ func ReadInput(filename string) string {
 
 // ReadStdin returns the contents of data piped to stdin until EOF.
 func ReadStdin() string {
-	d, err := ioutil.ReadAll(os.Stdin)
+	d, err := io.ReadAll(os.Stdin)
 	if err != nil {
 		panic(err)
 	}
@@ -31,7 +31,7 @@ func ReadStdin() string {
 
 // ReadStdin returns the contents of data piped to stdin until EOF.
 func ReadStdinRaw() string {
-	d, err := ioutil.ReadAll(os.Stdin)
+	d, err := io.ReadAll(os.Stdin)
 	if err != nil {
 		panic(err)
 	}
@@ -122,6 +122,13 @@ func Max(x, y int) int {
 
 func Min(x, y int) int {
 	return int(math.Min(float64(x), float64(y)))
+}
+
+func Abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
 }
 
 func SortString(s string) string {
