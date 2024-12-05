@@ -4,10 +4,13 @@ import (
 	"fmt"
 	"strings"
 
-	"slices"
-
 	"github.com/Urbansson/advent-of-code/pkg/aoc"
 )
+
+type rule struct {
+	start int
+	end   int
+}
 
 func main() {
 	data := aoc.ReadStdin()
@@ -18,6 +21,8 @@ func main() {
 
 	// COntains what pages needs to be printed before the keyed page.
 	before := map[int][]int{}
+
+	rules := []rule{}
 
 	pi := 0
 
@@ -31,6 +36,9 @@ func main() {
 		a := aoc.Atoi(s[1])
 		after[b] = append(after[b], a)
 		before[a] = append(before[a], b)
+
+		rules = append(rules, rule{start: b, end: a})
+
 	}
 
 	updates := [][]int{}
@@ -43,83 +51,66 @@ func main() {
 
 	}
 
-	// for k, v := range after {
-	// 	fmt.Println(k, ": ", v)
-	// }
-	// fmt.Println("---")
-	// for k, v := range before {
-	// 	fmt.Println(k, ": ", v)
-	// }
-	// fmt.Println("---")
-	// for _, v := range updates {
-	// 	fmt.Println(v)
-	// }
-	// fmt.Println("---")
+	for k, v := range after {
+		fmt.Println(k, ": ", v)
+	}
+	fmt.Println("---")
+	for k, v := range before {
+		fmt.Println(k, ": ", v)
+	}
+	fmt.Println("---")
+	for _, v := range updates {
+		fmt.Println(v)
+	}
+	fmt.Println("---")
 
 	sum := 0
-	for _, u := range updates {
-		// fmt.Println("Checking if update is valid,", u)
-		seenBefore := map[int]bool{}
 
+	for _, update := range updates {
 		valid := true
+		fmt.Println("Checking if update is valid,", update)
 
-		for i, update := range u {
+		for _, r := range rules {
 
-			if v, ok := after[update]; ok {
+			fmt.Println("check rule", r)
 
-				// fmt.Println("Checking that ", after[update], " is not present before", update, "in", u[:i])
-				// If we have seen the update that should be after this it is invalid
-				for _, shouldBeAfter := range v {
+			si := contains(update, r.start)
 
-					if _, ok := seenBefore[shouldBeAfter]; ok {
-						// Invalid
-						// fmt.Println("Invalid,", shouldBeAfter, " should not be before", update)
-						valid = false
-					}
-				}
+			ei := contains(update, r.end)
 
+			if si < 0 {
+				continue
 			}
 
-			// fmt.Println("----")
-
-			if v, ok := before[update]; ok {
-				// fmt.Println("Checking that ", before[update], " is not present in", u[i+1:])
-
-				for _, shouldNotBeAfter := range v {
-					if ok := slices.Contains(u[i+1:], shouldNotBeAfter); ok {
-						// fmt.Println("Invalid,", shouldNotBeAfter, " should not be after", update)
-						valid = false
-					}
-				}
+			if ei < 0 {
+				continue
 			}
-			seenBefore[update] = true
 
-			// fmt.Println("Checking that ", before[update], " is not present after", update, "in", u[i+1:])
+			fmt.Println(si, ei)
+			if si > ei {
+				fmt.Println("invalid")
 
-			// if v, ok := before[update]; ok {
-			// 	// If we have not seen the update that should be before this it is invalid
-			// 	for _, shouldBeBefore := range v {
-			// 		if _, ok := seen[shouldBeBefore]; !ok {
-			// 			// Invalid
-			// 			fmt.Println("Invalid, should have been seen")
-			// 			valid = false
-
-			// 		}
-			// 	}
-			// }
-			// fmt.Println("----")
-
+				valid = false
+			}
 		}
 
+		fmt.Println(valid, update)
 		if valid {
 
 			// fmt.Println("Middle valie", u[len(u)/2])
-			sum += u[len(u)/2]
+			sum += update[len(update)/2]
 		}
+		fmt.Println("---")
 
-		// fmt.Println("---", valid, ":", u)
-		// fmt.Println("---")
 	}
+	fmt.Println(sum)
+}
 
-	fmt.Println("result:", sum)
+func contains(s []int, e int) int {
+	for i, a := range s {
+		if a == e {
+			return i
+		}
+	}
+	return -1
 }
