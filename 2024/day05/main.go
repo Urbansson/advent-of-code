@@ -14,8 +14,7 @@ type rule struct {
 }
 
 func main() {
-	data := aoc.ReadStdin()
-	lines := aoc.ExtractLines(data)
+	lines := aoc.ExtractLines(aoc.ReadStdin())
 
 	rules := []rule{}
 
@@ -34,10 +33,11 @@ func main() {
 		updates = append(updates, aoc.ExtractInts(l))
 	}
 
-	sum := 0
+	sum1 := 0
+	sum2 := 0
 
 	for _, update := range updates {
-		valid := false
+		sorted := false
 		for i := 0; i < len(rules); i++ {
 			r := rules[i]
 			si := slices.Index(update, r.start)
@@ -52,14 +52,16 @@ func main() {
 
 			if si > ei {
 				update[si], update[ei] = update[ei], update[si]
-				valid = true
+				sorted = true
 				i = 0
 			}
 		}
 
-		if valid {
-			sum += update[len(update)/2]
+		if sorted {
+			sum2 += update[len(update)/2]
+		} else {
+			sum1 += update[len(update)/2]
 		}
 	}
-	fmt.Println(sum)
+	fmt.Println(sum1, sum2)
 }
