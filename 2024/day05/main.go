@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/Urbansson/advent-of-code/pkg/aoc"
@@ -39,8 +40,8 @@ func main() {
 		valid := false
 		for i := 0; i < len(rules); i++ {
 			r := rules[i]
-			si := contains(update, r.start)
-			ei := contains(update, r.end)
+			si := slices.Index(update, r.start)
+			ei := slices.Index(update, r.end)
 
 			if si < 0 {
 				continue
@@ -61,13 +62,4 @@ func main() {
 		}
 	}
 	fmt.Println(sum)
-}
-
-func contains(s []int, e int) int {
-	for i, a := range s {
-		if a == e {
-			return i
-		}
-	}
-	return -1
 }
