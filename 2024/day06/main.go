@@ -12,6 +12,7 @@ type guard struct {
 
 	uniqueSpots int
 	steps       int
+	visited     map[aoc.XY]rune
 }
 
 func main() {
@@ -39,6 +40,7 @@ func main() {
 					pos:         p,
 					direction:   v,
 					uniqueSpots: 1,
+					visited:     make(map[aoc.XY]rune),
 				}
 				g[p] = 'X'
 			}
@@ -48,8 +50,7 @@ func main() {
 	PrettyPrintGrid(g)
 
 	validBlocks := 0
-	for i, p := range bs {
-		fmt.Println("testing pos", i, "/", len(bs))
+	for _, p := range bs {
 		ng := make(map[aoc.XY]rune)
 		for k, v := range g {
 			ng[k] = v
@@ -59,10 +60,14 @@ func main() {
 		// Add the new block
 		ng[p] = '#'
 
-		for cpg.walk(ng) {
+		for {
+			bounds, cycle := cpg.walk(ng)
 			// To many steps, stuck in loop
-			if cpg.steps > 30000 {
+			if cycle {
 				validBlocks++
+				break
+			}
+			if !bounds {
 				break
 			}
 		}
@@ -77,6 +82,7 @@ func (g *guard) clone() guard {
 		direction:   g.direction,
 		uniqueSpots: 1,
 		steps:       0,
+		visited:     make(map[aoc.XY]rune),
 	}
 }
 
@@ -93,7 +99,7 @@ func (g *guard) changeDirection() {
 	}
 }
 
-func (g *guard) walk(grid map[aoc.XY]rune) bool {
+func (g *guard) walk(grid map[aoc.XY]rune) (bool, bool) {
 	var np aoc.XY
 
 	switch g.direction {
@@ -119,16 +125,20 @@ func (g *guard) walk(grid map[aoc.XY]rune) bool {
 		}
 	}
 
+	if dir, ok := g.visited[np]; ok && dir == g.direction {
+		return false, true
+	}
+
 	nextStep, ok := grid[np]
 	// Outside of bounds, indicate we could not walk
 	if !ok {
-		return false
+		return false, false
 	}
 
 	// way blocked
 	if nextStep == '#' {
 		g.changeDirection()
-		return true
+		return true, false
 	}
 
 	// Mark as visited
@@ -137,10 +147,13 @@ func (g *guard) walk(grid map[aoc.XY]rune) bool {
 	if nextStep == '.' {
 		g.uniqueSpots += 1
 	}
+
+	g.visited[np] = g.direction
 	g.steps += 1
 	// Move
 	g.pos = np
-	return true
+
+	return true, false
 }
 
 func PrettyPrintGrid(grid map[aoc.XY]rune) {
