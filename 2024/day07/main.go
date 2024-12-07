@@ -20,7 +20,6 @@ func main() {
 		if calc(res, nums[0], nums[1:], fmt.Sprintf("%d", nums[0])) {
 			sum += res
 		}
-		//	fmt.Println("---")
 	}
 
 	fmt.Println(sum)
@@ -28,11 +27,7 @@ func main() {
 
 func calc(res, cur int, i []int, f string) bool {
 	if len(i) == 0 {
-		if cur == res {
-			fmt.Println(f)
-			return true
-		}
-		return false
+		return cur == res
 	}
 
 	next := i[0]
@@ -43,6 +38,11 @@ func calc(res, cur int, i []int, f string) bool {
 	}
 
 	if calc(res, cur*next, i[1:], fmt.Sprintf("%s*%d", f, next)) {
+		sum = true
+	}
+
+	result := aoc.Atoi(fmt.Sprintf("%d%d", cur, next))
+	if calc(res, result, i[1:], fmt.Sprintf("%s*%d", f, next)) {
 		sum = true
 	}
 
