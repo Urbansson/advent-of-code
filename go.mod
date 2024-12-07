@@ -1,3 +1,3 @@
 module github.com/Urbansson/advent-of-code
 
-go 1.19
+go 1.23
