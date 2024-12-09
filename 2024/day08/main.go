@@ -46,19 +46,23 @@ func findAntinodes(wm map[aoc.XY]rune, antennas []aoc.XY) map[aoc.XY]bool {
 	antinodes := make(map[aoc.XY]bool, 0)
 	for _, a := range antennas {
 		for _, v := range antennas {
-			if a == v {
-				continue
-			}
-			offset := aoc.Offset(a, v)
-			antinode := aoc.XY{
-				X: a.X + offset.X,
-				Y: a.Y + offset.Y,
-			}
-			if v, ok := wm[antinode]; ok {
-				if v == '.' {
-					wm[antinode] = '#'
+			if a != v {
+				offset := aoc.Offset(a, v)
+				antinode := a
+				for {
+					v, ok := wm[antinode]
+					if !ok {
+						break
+					}
+					if v == '.' {
+						wm[antinode] = '#'
+					}
+					antinodes[antinode] = true
+					antinode = aoc.XY{
+						X: antinode.X + offset.X,
+						Y: antinode.Y + offset.Y,
+					}
 				}
-				antinodes[antinode] = true
 			}
 		}
 	}
