@@ -7,6 +7,8 @@ type XY struct {
 	Y int
 }
 
+type Grid[T any] map[XY]T
+
 func Offset(a, b XY) XY {
 	return XY{
 		X: a.X - b.X,
@@ -14,8 +16,8 @@ func Offset(a, b XY) XY {
 	}
 }
 
-func PrintGrid[V int64 | float64 | rune](grid map[XY]V, f func(V) string) {
-	if len(grid) == 0 {
+func (g Grid[T]) Print(f func(T) string) {
+	if len(g) == 0 {
 		fmt.Println("Grid is empty.")
 		return
 	}
@@ -23,7 +25,7 @@ func PrintGrid[V int64 | float64 | rune](grid map[XY]V, f func(V) string) {
 	// Determine bounds of the grid
 	var minX, minY, maxX, maxY int
 
-	for coord := range grid {
+	for coord := range g {
 		if coord.X < minX {
 			minX = coord.X
 		}
@@ -41,7 +43,7 @@ func PrintGrid[V int64 | float64 | rune](grid map[XY]V, f func(V) string) {
 	// Print the grid
 	for y := minY; y <= maxY; y++ { // Start from maxY to print top-down
 		for x := minX; x <= maxX; x++ {
-			val, ok := grid[XY{X: x, Y: y}]
+			val, ok := g[XY{X: x, Y: y}]
 			if ok {
 				fmt.Print(f(val))
 			} else {

@@ -13,7 +13,7 @@ func main() {
 	sum := 0
 
 	freq := map[rune][]aoc.XY{}
-	worldMap := map[aoc.XY]rune{}
+	worldMap := aoc.Grid[rune]{}
 	for y, rows := range lines {
 		for x, v := range rows {
 			xy := aoc.XY{X: x, Y: y}
@@ -34,7 +34,7 @@ func main() {
 		}
 	}
 
-	aoc.PrintGrid(worldMap, func(v rune) string {
+	worldMap.Print(func(v rune) string {
 		return string(v)
 	})
 
