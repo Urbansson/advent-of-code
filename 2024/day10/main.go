@@ -6,9 +6,15 @@ import (
 	"github.com/Urbansson/advent-of-code/pkg/aoc"
 )
 
+var directions = []aoc.XY{
+	{X: 1, Y: 0},  // Right
+	{X: -1, Y: 0}, // Left
+	{X: 0, Y: 1},  // Down
+	{X: 0, Y: -1}, // Up
+}
+
 func main() {
-	data := aoc.ReadStdin()
-	lines := aoc.ExtractLines(data)
+	lines := aoc.ExtractLines(aoc.ReadStdin())
 
 	heads := []aoc.XY{}
 	worldMap := aoc.Grid[int]{}
@@ -32,10 +38,6 @@ func main() {
 		sum2 += len(t)
 	}
 
-	worldMap.Print(func(v int) string {
-		return fmt.Sprintf("%d", v)
-	})
-
 	fmt.Println("---")
 	fmt.Println(sum1)
 	fmt.Println(sum2)
@@ -58,26 +60,12 @@ func explore(g aoc.Grid[int], s aoc.XY, prev int, t map[aoc.XY]int) int {
 	}
 
 	sum := 0
-	// go up
-	sum += explore(g, aoc.XY{
-		X: s.X,
-		Y: s.Y + 1,
-	}, i, t)
-	// go down
-	sum += explore(g, aoc.XY{
-		X: s.X,
-		Y: s.Y - 1,
-	}, i, t)
-	// go left
-	sum += explore(g, aoc.XY{
-		X: s.X - 1,
-		Y: s.Y,
-	}, i, t)
-	// go right
-	sum += explore(g, aoc.XY{
-		X: s.X + 1,
-		Y: s.Y,
-	}, i, t)
+	for _, d := range directions {
+		sum += explore(g, aoc.XY{
+			X: s.X + d.X,
+			Y: s.Y + d.Y,
+		}, i, t)
+	}
 
 	return sum
 }
