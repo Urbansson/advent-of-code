@@ -2,42 +2,48 @@ package main
 
 import (
 	"fmt"
-	"slices"
 
 	"github.com/Urbansson/advent-of-code/pkg/aoc"
 )
 
-func main() {
-	stones := aoc.ExtractInts(aoc.ReadStdin())
-	for range 25 {
-		for i := 0; i < len(stones); i++ {
-			v := stones[i]
-			r := applyRule(v)
-			if len(r) == 1 {
-				stones = slices.Replace(stones, i, i+1, r...)
-			} else {
-				stones = slices.Replace(stones, i, i+1, r[0])
-				stones = slices.Insert(stones, i+1, r[1])
-				i += 1
-			}
-		}
-	}
-	fmt.Println("---")
-	fmt.Println(len(stones))
+type Entry struct {
+	rock  int
+	depth int
 }
 
-func applyRule(r int) []int {
-	if r == 0 {
-		return []int{1}
+func main() {
+	stones := aoc.ExtractInts(aoc.ReadStdin())
+
+	dp := map[Entry]int{}
+
+	var sum int
+	for _, v := range stones {
+		sum += (applyRule(v, 75, dp))
 	}
-	d := aoc.Digits(r)
-	if len(d)%2 == 0 {
+	fmt.Println("---")
+	fmt.Println(sum)
+}
+
+func applyRule(rock int, depth int, cache map[Entry]int) int {
+	if res, ok := cache[Entry{rock, depth}]; ok {
+		return res
+	}
+	if rock == -1 {
+		return 0
+	}
+	if depth == 0 {
+		return 1
+	}
+	left, right := -1, -1
+	if rock == 0 {
+		left = 1
+	} else if d := aoc.Digits(rock); len(d)%2 == 0 {
 		h := len(d) / 2
-
-		f := aoc.DigitsToInt(d[:h])
-		s := aoc.DigitsToInt(d[h:])
-
-		return []int{f, s}
+		left = aoc.DigitsToInt(d[:h])
+		right = aoc.DigitsToInt(d[h:])
+	} else {
+		left = rock * 2024
 	}
-	return []int{r * 2024}
+	cache[Entry{rock, depth}] = applyRule(left, depth-1, cache) + applyRule(right, depth-1, cache)
+	return cache[Entry{rock, depth}]
 }

@@ -101,6 +101,16 @@ func Digits(i int) []int {
 	return digits
 }
 
+func DigitsToInt(s []int) int {
+	res := 0
+	op := 1
+	for i := len(s) - 1; i >= 0; i-- {
+		res += s[i] * op
+		op *= 10
+	}
+	return res
+}
+
 // MinMax returns min max values from a slice.
 func MinMax(array []int) (int, int) {
 	max := array[0]
