@@ -9,27 +9,46 @@ import (
 func main() {
 	data := aoc.ReadStdin()
 	lines := aoc.ExtractLines(data)
-	pass := 0
-	dail := 50
+
+	dail := Dail{position: 50, passes: 0}
 	for _, l := range lines {
 		op := l[0:1]
 		v := aoc.Atoi(l[1:])
-
 		if op == "L" {
-			dail -= v
-			for dail < 0 {
-				dail += 100
+			for i := 0; i < v; i++ {
+				dail.RotateLeft()
 			}
 		}
 		if op == "R" {
-			dail += v
-			for dail >= 100 {
-				dail -= 100
+			for i := 0; i < v; i++ {
+				dail.RotateRight()
 			}
 		}
-		if dail == 0 {
-			pass += 1
+	}
+	fmt.Printf("pass: %d \n", dail.passes)
+}
+
+type Dail struct {
+	position int
+	passes   int
+}
+
+func (d *Dail) RotateLeft() {
+	if d.position == 0 {
+		d.position = 99
+	} else {
+		d.position -= 1
+		if d.position == 0 {
+			d.passes++
 		}
 	}
-	fmt.Printf("pass: %d\n", pass)
+}
+
+func (d *Dail) RotateRight() {
+	if d.position == 99 {
+		d.position = 0
+		d.passes++
+	} else {
+		d.position += 1
+	}
 }
