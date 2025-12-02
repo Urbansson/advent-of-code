@@ -16,17 +16,15 @@ func main() {
 		parts := strings.Split(id, "-")
 		p1 := aoc.Atoi(parts[0])
 		p2 := aoc.Atoi(parts[1])
-
 		for i := p1; i <= p2; i++ {
 			v := strconv.Itoa(i)
-			if len(v)%2 != 0 {
-				continue
-			}
-			m := len(v) / 2
-			if v[0:m] == v[m:] {
-				sum += i
+			for j := 1; j <= len(v)/2; j++ {
+				if strings.Repeat(v[0:j], len(v)/j) == v {
+					sum += i
+					break
+				}
 			}
 		}
 	}
-	fmt.Printf("sum: %d \n", sum)
+	fmt.Println(sum)
 }
