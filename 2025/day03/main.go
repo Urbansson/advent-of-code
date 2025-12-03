@@ -11,15 +11,25 @@ func main() {
 	lines := aoc.ExtractLines(data)
 	sum := 0
 	for _, l := range lines {
-		bs := aoc.DigitList(l)
-		max := 0
-		for i, j := range bs {
-			for _, k := range bs[i+1:] {
-				c := aoc.DigitsToInt([]int{j, k})
-				max = aoc.Max(max, c)
-			}
-		}
-		sum += max
+		sum += findJoltage(12, aoc.DigitList(l))
 	}
 	fmt.Println(sum)
+}
+
+func findJoltage(n int, s []int) int {
+	var val []int
+	si := -1
+	for i := n; i > 0; i-- {
+		var max int
+		var maxIndex int
+		for j := si + 1; j <= len(s)-i; j++ {
+			if s[j] > max {
+				max = s[j]
+				maxIndex = j
+			}
+		}
+		val = append(val, max)
+		si = maxIndex
+	}
+	return aoc.DigitsToInt(val)
 }
