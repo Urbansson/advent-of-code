@@ -18,11 +18,8 @@ func main() {
 	lines := aoc.ExtractLines(data)
 
 	ranges := []rangePoint{}
-
-	dividerIndex := 0
-	for i, line := range lines {
+	for _, line := range lines {
 		if line == "" {
-			dividerIndex = i
 			break
 		}
 
@@ -40,29 +37,24 @@ func main() {
 	}
 
 	sort.Slice(ranges, func(i, j int) bool {
-		return ranges[i].value < ranges[j].value
+		if ranges[i].value != ranges[j].value {
+			return ranges[i].value < ranges[j].value
+		}
+		// When values are equal, starts come before ends
+		return ranges[i].isStart && !ranges[j].isStart
 	})
 
-	fresh := 0
-	for _, line := range lines[dividerIndex+1:] {
-		checkValue := aoc.Atoi(line)
-
-		ar := 0
-		for _, point := range ranges {
-			if point.value >= checkValue {
-				break
+	sum := 0
+	stack := []int{}
+	for _, point := range ranges {
+		if point.isStart {
+			stack = append(stack, point.value)
+		} else {
+			if len(stack) == 1 {
+				sum += point.value - stack[0] + 1
 			}
-
-			if point.isStart {
-				ar++
-			} else {
-				ar--
-			}
-		}
-
-		if ar > 0 {
-			fresh++
+			stack = stack[:len(stack)-1]
 		}
 	}
-	fmt.Println(fresh)
+	fmt.Println(sum)
 }
