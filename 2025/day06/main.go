@@ -13,47 +13,54 @@ func main() {
 	lines := aoc.ExtractLines(data)
 
 	ops := strings.Fields(lines[len(lines)-1])
+	numberLines := lines[:len(lines)-1]
 
-	// Find longest row
-	max := 0
-	for _, v := range lines {
-		max = aoc.Max(max, len(v))
+	// Normalize line lengths
+	maxWidth := 0
+	for _, line := range numberLines {
+		maxWidth = aoc.Max(maxWidth, len(line))
 	}
 
-	// Make sure all rows are the same length by padding spaces to the end
-	for i, v := range lines {
-		if len(v) != max {
-			padding := max - len(v)
-			lines[i] = v + strings.Repeat(" ", padding)
-		}
+	for i := range numberLines {
+		numberLines[i] += strings.Repeat(" ", maxWidth-len(numberLines[i]))
 	}
 
-	n := 0
+	opIndex := 0
 	currentSum := 0
 	totalSum := 0
-	for i := 0; i < max; i++ {
-		op := ops[n]
-		rn := ""
-		for _, v := range lines[:len(lines)-1] {
-			rn += string(v[i])
+
+	for col := 0; col < maxWidth; col++ {
+		// Extract vertical number
+		columnStr := ""
+		for _, line := range numberLines {
+			columnStr += string(line[col])
 		}
-		v, err := strconv.Atoi(strings.Trim(rn, " "))
-		// If we fail to parse its the devider of an string with only spaces.
-		// Reset and add to totalSum
+
+		value, err := strconv.Atoi(strings.TrimSpace(columnStr))
+
 		if err != nil {
-			n++
+			// Space divider - finalize current calculation
 			totalSum += currentSum
 			currentSum = 0
+			opIndex++
 			continue
 		}
-		if op == "*" {
+
+		if opIndex >= len(ops) {
+			break
+		}
+
+		switch ops[opIndex] {
+		case "*":
 			if currentSum == 0 {
-				currentSum++
+				currentSum = value
+			} else {
+				currentSum *= value
 			}
-			currentSum *= v
-		} else {
-			currentSum += v
+		case "+":
+			currentSum += value
 		}
 	}
+
 	fmt.Println(totalSum + currentSum)
 }
