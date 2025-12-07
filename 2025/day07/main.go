@@ -19,27 +19,27 @@ func main() {
 			grid[aoc.XY{X: x, Y: y}] = v
 		}
 	}
-	visited := make(map[aoc.XY]bool)
+	visited := aoc.Grid[int]{}
 	fmt.Println(traverse(aoc.XY{X: start.X, Y: start.Y + 1}, grid, visited))
 }
 
-func traverse(s aoc.XY, g aoc.Grid[rune], visited map[aoc.XY]bool) int {
+func traverse(s aoc.XY, g aoc.Grid[rune], visited aoc.Grid[int]) int {
 	v := g[s]
 
-	if visited[s] {
-		return 0
+	if visited[s] > 0 {
+		return visited[s]
 	}
 
 	if v == '.' {
-		visited[s] = true
-		return traverse(aoc.XY{X: s.X, Y: s.Y + 1}, g, visited)
+		visited[s] += traverse(aoc.XY{X: s.X, Y: s.Y + 1}, g, visited)
+		return visited[s]
 	}
 
 	if v == '^' {
 		left := traverse(aoc.XY{X: s.X - 1, Y: s.Y}, g, visited)
 		right := traverse(aoc.XY{X: s.X + 1, Y: s.Y}, g, visited)
-		return left + right + 1
+		return left + right
 	}
 
-	return 0
+	return 1
 }
